@@ -1,0 +1,18 @@
+<!doctype html>
+<html
+  lang="{{ or site.Language.LanguageCode site.Language.Lang }}"
+  dir="{{ or site.Language.LanguageDirection `ltr` }}"
+>
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body class="text-text">
+    <div class="flex min-h-screen flex-col bg-background">
+      {{ partialCached "header.html" . }}
+      <main class="grow">
+        {{ block "main" . }}{{ end }}
+      </main>
+      {{ partialCached "footer.html" . }}
+    </div>
+  </body>
+</html>

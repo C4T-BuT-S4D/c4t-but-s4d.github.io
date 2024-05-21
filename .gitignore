@@ -1,0 +1,8 @@
+Thumbs.db
+.DS_Store
+node_modules
+.hugo_build.lock
+hugo_stats.json
+pnpm-lock.yaml
+/public
+/resources

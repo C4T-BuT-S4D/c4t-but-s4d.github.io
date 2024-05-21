@@ -1,0 +1,123 @@
+.post {
+  font-family: theme("fontFamily.postMono");
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+
+  p {
+    font-family: theme("fontFamily.postSans");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  h1::before {
+    color: theme("colors.accent");
+    content: "# ";
+  }
+
+  h2::before {
+    color: theme("colors.accent");
+    content: "## ";
+  }
+
+  h3::before {
+    color: theme("colors.accent");
+    content: "### ";
+  }
+
+  h4::before {
+    color: theme("colors.accent");
+    content: "#### ";
+  }
+
+  h5::before {
+    color: theme("colors.accent");
+    content: "##### ";
+  }
+
+  h6::before {
+    color: theme("colors.accent");
+    content: "###### ";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: 1.2rem;
+    margin-top: 2em;
+    margin-bottom: 1em;
+  }
+
+  p {
+    margin: 1em 0;
+  }
+
+  blockquote {
+    padding-left: 1em;
+    border-left: 3px solid theme("colors.border");
+    color: theme("colors.faded");
+  }
+
+  hr {
+    border-top: 3px dotted theme("colors.border");
+    margin: 1em 0;
+  }
+
+  img {
+    border: 2px solid theme("colors.imageBorder");
+    max-width: 100%;
+  }
+
+  a {
+    border-bottom: 3px solid theme("colors.accent");
+    text-decoration: none;
+  }
+
+  a:hover {
+    background-color: theme("colors.border");
+  }
+
+  pre {
+    overflow-x: auto;
+    background-color: #272822;
+  }
+
+  ol {
+    list-style: decimal;
+    padding-left: 3ch;
+    margin: 1em 0;
+  }
+
+  li ol {
+    padding-left: 2ch;
+  }
+
+  :not(.tags) > ul,
+  > ul {
+    list-style: none;
+    padding-left: 2ch;
+    margin: 1em 0;
+
+    li {
+      text-indent: -2ch;
+    }
+
+    > li::before {
+      content: "* ";
+      font-weight: bold;
+    }
+  }
+
+  figure h4 {
+    font-size: 1rem;
+    margin: 0;
+    margin-bottom: 1em;
+  }
+
+  figure h4::before {
+    content: "↳ ";
+  }
+}

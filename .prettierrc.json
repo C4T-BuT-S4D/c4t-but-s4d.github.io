@@ -1,0 +1,18 @@
+{
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+
+  "plugins": ["prettier-plugin-go-template", "prettier-plugin-tailwindcss", "prettier-plugin-toml"],
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": {
+        "parser": "go-template",
+        "goTemplateBracketSpacing": true
+      }
+    }
+  ]
+}

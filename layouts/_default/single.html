@@ -1,0 +1,40 @@
+{{ define "main" }}
+  <article class="post pl-4 pr-4 xl:pl-72 xl:pr-72">
+    <h1>{{ .Title }}</h1>
+    <span class="text-faded"
+      >Posted on <time datetime="{{ .Date.Format "2006-01-02" }}">{{ dateFormat ":date_long" .Date }}</time>, by</span
+    >
+    {{ if isset .Params "social" }}
+      <a href="{{ .Params.social }}">{{ .Params.author }}</a>
+    {{ else }}
+      <span>{{ .Params.author }}</span>
+    {{ end }}
+
+    {{- if .Draft -}}
+      ,
+      <span class="text-accent">DRAFT</span>
+    {{- end -}}
+
+    {{ if isset .Params "tldr" }}
+      <div class="pt-4">
+        <strong>tl;dr:</strong>
+        {{ .Params.tldr }}
+      </div>
+    {{ end }}
+
+
+    <section>
+      {{ .Content }}
+    </section>
+
+    {{ if gt .Params.tags 0 }}
+      <nav class="tags">
+        <ul class="flex flex-wrap">
+          {{ range .Params.tags }}
+            <li class="mr-2"><span class="text-tag mr-[2px]">#</span><span>{{ . }}</span></li>
+          {{ end }}
+        </ul>
+      </nav>
+    {{ end }}
+  </article>
+{{ end }}

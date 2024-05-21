@@ -1,0 +1,30 @@
+{{ define "main" }}
+  <div class="post pl-4 pr-4 xl:pl-72 xl:pr-72">
+    {{ $paginator := .Paginate .Site.RegularPages }}
+    {{ range $paginator.Pages }}
+      <section>
+        <h1><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+        <time datetime="{{ .Date.Format "2006-01-02" }}" class="text-faded">{{ dateFormat "Jan 2, 2006" .Date }}</time>
+        {{- if .Draft -}}
+          ,
+          <span class="text-accent">DRAFT</span>
+        {{- end -}}
+        <br />
+        <div class="mb-2">
+          {{ .Summary }}
+        </div>
+        <a href="{{ .RelPermalink }}">Read more</a>
+      </section>
+    {{ end }}
+    {{ if gt $paginator.TotalPages 1 }}
+      <nav class="mt-8">
+        {{ if $paginator.HasPrev }}
+          <a href="{{ $paginator.Prev.URL }}">← Prev</a>
+        {{ end }}
+        {{ if $paginator.HasNext }}
+          <a href="{{ $paginator.Next.URL }}">Next →</a>
+        {{ end }}
+      </nav>
+    {{ end }}
+  </div>
+{{ end }}

@@ -1,0 +1,32 @@
+baseURL = "https://c4t-but-s4d.github.io/"
+languageCode = "en-us"
+title = "C4T BuT S4D"
+
+[menu]
+[[menu.main]]
+name = "Blog"
+url = "/blog/"
+weight = 2
+
+[module]
+[module.hugoVersion]
+extended = false
+min = "0.112.0"
+[[module.mounts]]
+source = "assets"
+target = "assets"
+[[module.mounts]]
+source = "hugo_stats.json"
+target = "assets/watching/hugo_stats.json"
+
+[build]
+writeStats = true
+[[build.cachebusters]]
+source = "assets/watching/hugo_stats\\.json"
+target = "styles\\.scss"
+[[build.cachebusters]]
+source = "(postcss|tailwind)\\.config\\.js"
+target = "scss"
+[[build.cachebusters]]
+source = "assets/.*\\.(.*)$"
+target = "$1"

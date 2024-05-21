@@ -1,0 +1,18 @@
+{{ $styles := resources.Get "scss/styles.scss" }}
+{{ $styles = $styles | resources.ToCSS | resources.PostCSS }}
+
+{{ if hugo.IsProduction }}
+  {{ $styles = $styles | resources.Minify | resources.Fingerprint }}
+  {{ $styles = $styles | resources.PostProcess }}
+{{ end }}
+
+{{ if hugo.IsProduction }}
+  <link
+    rel="stylesheet"
+    href="{{ $styles.RelPermalink }}"
+    integrity="{{ $styles.Data.Integrity }}"
+    crossorigin="anonymous"
+  />
+{{ else }}
+  <link rel="stylesheet" href="{{ $styles.RelPermalink }}" />
+{{ end }}
