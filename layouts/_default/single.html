@@ -2,13 +2,13 @@
   <article class="post pl-4 pr-4 xl:pl-72 xl:pr-72">
     <h1>{{ .Title }}</h1>
     <span class="text-faded"
-      >Posted on <time datetime="{{ .Date.Format "2006-01-02" }}">{{ dateFormat ":date_long" .Date }}</time>, by</span
-    >
-    {{ if isset .Params "social" }}
+      >Posted on <time datetime="{{ .Date.Format "2006-01-02" }}">{{ dateFormat ":date_long" .Date }}</time> by
+    </span>
+    {{- if isset .Params "social" -}}
       <a href="{{ .Params.social }}">{{ .Params.author }}</a>
-    {{ else }}
+    {{- else -}}
       <span>{{ .Params.author }}</span>
-    {{ end }}
+    {{- end -}}
 
     {{- if .Draft -}}
       ,
@@ -17,7 +17,7 @@
 
     {{ if isset .Params "tldr" }}
       <div class="pt-4">
-        <strong>tl;dr:</strong>
+        <span class="text-border">tl;dr:</span>
         {{ .Params.tldr }}
       </div>
     {{ end }}
