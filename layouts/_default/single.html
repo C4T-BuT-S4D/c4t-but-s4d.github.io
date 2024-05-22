@@ -4,10 +4,21 @@
     <span class="text-faded"
       >Posted on <time datetime="{{ .Date.Format "2006-01-02" }}">{{ dateFormat ":date_long" .Date }}</time> by
     </span>
-    {{- if isset .Params "social" -}}
-      <a href="{{ .Params.social }}">{{ .Params.author }}</a>
-    {{- else -}}
-      <span>{{ .Params.author }}</span>
+    {{ range .Params.authors }}
+      {{- if isset . "social" -}}
+        <a href="{{ .social }}">{{ .name }}</a>
+      {{- else -}}
+        <span>{{ .name }}</span>
+      {{- end -}}
+      {{ if and (.links) (gt (len .links) 0) }}
+        (
+        {{- range $index, $link := .links -}}
+          {{ if ne $index 0 -}}
+            ,
+          {{ end -}}<a href="{{ $link.link }}">{{ $link.name }}</a>
+        {{- end -}}
+        )
+      {{ end }}
     {{- end -}}
 
     {{- if .Draft -}}
@@ -31,7 +42,7 @@
       <nav class="tags">
         <ul class="flex flex-wrap">
           {{ range .Params.tags }}
-            <li class="mr-2"><span class="mr-[2px] text-tag">#</span><span>{{ . }}</span></li>
+            <li class="mr-2 before:text-tag before:content-['#']">{{ . }}</li>
           {{ end }}
         </ul>
       </nav>
