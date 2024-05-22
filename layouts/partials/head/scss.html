@@ -7,12 +7,7 @@
 {{ end }}
 
 {{ if hugo.IsProduction }}
-  <link
-    rel="stylesheet"
-    href="{{ $styles.RelPermalink }}"
-    integrity="{{ $styles.Data.Integrity }}"
-    crossorigin="anonymous"
-  />
+  <link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}" />
 {{ else }}
   <link rel="stylesheet" href="{{ $styles.RelPermalink }}" />
 {{ end }}
