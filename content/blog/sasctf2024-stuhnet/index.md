@@ -16,13 +16,13 @@ We were given a website that loads a WASM module. The website splits a string in
 
 Checks 1-5 are very simple, and I was able to copy them from Ghidra pseudocode. They ran correctly after a few type changes. Here's a sample:
 
-![Check 2 pseudocode](check2.png)
+![Check 2 pseudocode](check2.webp)
 
 ## Check 6
 
 Check 6 is a different story. In Ghidra, it looks horrible. However, by recompiling with wasm2ida, we get a simplified state machine. There's a main loop with a switch case on `v1`, and then there are many cases. Each case checks some condition, then depending on whether it is true or not, jumps to one of two cases. Here's what it looks like:
 
-![Check 6 state machine](check6.png)
+![Check 6 state machine](check6.webp)
 
 ## DFS
 
