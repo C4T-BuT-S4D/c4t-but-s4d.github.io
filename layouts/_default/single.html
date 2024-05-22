@@ -4,13 +4,16 @@
     <span class="text-faded"
       >Posted on <time datetime="{{ .Date.Format "2006-01-02" }}">{{ dateFormat ":date_long" .Date }}</time> by
     </span>
-    {{ range .Params.authors }}
-      {{- if isset . "social" -}}
-        <a href="{{ .social }}">{{ .name }}</a>
+    {{ range $authorIndex, $author := .Params.authors -}}
+      {{ if ne $authorIndex 0 -}}
+        ,
+      {{ end -}}
+      {{- if isset $author "social" -}}
+        <a href="{{ $author.social }}">{{ $author.name }}</a>
       {{- else -}}
-        <span>{{ .name }}</span>
+        <span>{{ $author.name }}</span>
       {{- end -}}
-      {{ if and (.links) (gt (len .links) 0) }}
+      {{- if and (.links) (gt (len .links) 0) }}
         (
         {{- range $index, $link := .links -}}
           {{ if ne $index 0 -}}
@@ -18,7 +21,7 @@
           {{ end -}}<a href="{{ $link.link }}">{{ $link.name }}</a>
         {{- end -}}
         )
-      {{ end }}
+      {{- end }}
     {{- end -}}
 
     {{- if .Draft -}}
