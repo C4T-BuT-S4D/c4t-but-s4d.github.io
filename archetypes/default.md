@@ -1,7 +1,8 @@
 ---
 params:
-  author: ""
-  social: ""
+  authors:
+    - name: ""
+      social: ""
 title: '{{ replace .File.ContentBaseName "-" " " | title }}'
 tldr: ""
 date: "{{ .Date }}"
