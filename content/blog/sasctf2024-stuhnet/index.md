@@ -1,7 +1,7 @@
 ---
 params:
   authors:
-    - name: "falamous"
+    - name: falamous
       social: https://t.me/falamous
       links:
         - name: channel
