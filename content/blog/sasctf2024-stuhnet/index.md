@@ -6,7 +6,7 @@ params:
       links:
         - name: channel
           link: https://t.me/theinkyvoid
-title: "SAS CTF 2024 - CK0P0 CTYXHET writeup"
+title: "SAS CTF 2024 - CK0P0 CTYXHET"
 tldr: "challenge we solved by running angr on a binary generated from pseudocode of the wasm file"
 date: "2024-05-21T22:24:53+02:00"
 tags: [reverse]
