@@ -4,12 +4,20 @@
     {{ range $paginator.Pages }}
       <section>
         <h1><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+        {{ if gt .Params.tags 0 }}
+          <div class="tags mb-4">
+            <ul class="flex flex-wrap">
+              {{ range .Params.tags }}
+                <li class="mr-2 before:text-tag before:content-['#']">{{ . }}</li>
+              {{ end }}
+            </ul>
+          </div>
+        {{ end }}
         <time datetime="{{ .Date.Format "2006-01-02" }}" class="text-faded">{{ dateFormat "Jan 2, 2006" .Date }}</time>
         {{- if .Draft -}}
           ,
           <span class="text-accent">DRAFT</span>
         {{- end -}}
-        <br />
         <div class="mb-2">
           {{ .Summary }}
         </div>

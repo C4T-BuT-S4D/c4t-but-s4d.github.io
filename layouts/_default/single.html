@@ -1,6 +1,15 @@
 {{ define "main" }}
   <article class="post pl-4 pr-4 xl:pl-72 xl:pr-72">
     <h1>{{ .Title }}</h1>
+    {{ if gt .Params.tags 0 }}
+      <div class="tags mb-4">
+        <ul class="flex flex-wrap">
+          {{ range .Params.tags }}
+            <li class="mr-2 before:text-tag before:content-['#']">{{ . }}</li>
+          {{ end }}
+        </ul>
+      </div>
+    {{ end }}
     <span class="text-faded"
       >Posted on <time datetime="{{ .Date.Format "2006-01-02" }}">{{ dateFormat ":date_long" .Date }}</time> by
     </span>
@@ -40,15 +49,5 @@
     <section>
       {{ .Content }}
     </section>
-
-    {{ if gt .Params.tags 0 }}
-      <nav class="tags">
-        <ul class="flex flex-wrap">
-          {{ range .Params.tags }}
-            <li class="mr-2 before:text-tag before:content-['#']">{{ . }}</li>
-          {{ end }}
-        </ul>
-      </nav>
-    {{ end }}
   </article>
 {{ end }}
