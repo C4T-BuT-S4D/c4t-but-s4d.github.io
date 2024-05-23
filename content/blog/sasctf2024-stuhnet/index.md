@@ -10,6 +10,8 @@ title: "SAS CTF 2024 - CK0P0 CTYXHET writeup"
 tldr: "challenge we solved by running angr on a binary generated from pseudocode of the wasm file"
 date: "2024-05-21T22:24:53+02:00"
 tags: [reverse]
+summary: |
+  We were given a website that loads a WASM module. The website splits a string into 6 parts, then runs 6 different WASM check functions on the parts. If they are successful, it gives us the flag. I used wasm2ida to get an ELF binary with the same code and Ghidra with the WASM plugin to get decompilation. The checks themselves looked SMT-solvable, so I first tried to use Z3 but failed miserably. I then went on to use angr on a binary I wrote myself with the functions copied from disassembly.
 ---
 
 ## Basics
