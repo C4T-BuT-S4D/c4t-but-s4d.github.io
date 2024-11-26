@@ -106,6 +106,9 @@
 
     li {
       text-indent: -2ch;
+      > p {
+        display: inline;
+      }
     }
 
     > li::before {
