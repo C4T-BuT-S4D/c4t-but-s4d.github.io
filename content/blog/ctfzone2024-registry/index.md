@@ -16,19 +16,19 @@ summary: |
 We're given an Attack/Defense challenge containing 5 services:
 
 - registration \
-A custom service written in Go, used to registering (adding to database) new accounts
+  A custom service written in Go, used to registering (adding to database) new accounts
 
 - auth \
-Authentication server for Docker, based on [cesanta/docker_auth](https://github.com/cesanta/docker_auth) project
+  Authentication server for Docker, based on [cesanta/docker_auth](https://github.com/cesanta/docker_auth) project
 
 - registry \
-Container images distribution server, based on official implementation of registry [distribution/distribution](https://github.com/distribution/distribution)
+  Container images distribution server, based on official implementation of registry [distribution/distribution](https://github.com/distribution/distribution)
 
 - image-builder \
-A custom service written in Python and Bash, used to rebuild and flatten container images
+  A custom service written in Python and Bash, used to rebuild and flatten container images
 
 - nginx \
-Reverse proxy, entry point to internal endpoints
+  Reverse proxy, entry point to internal endpoints
 
 The checker's flow is following:
 
@@ -42,23 +42,23 @@ Auth policy allows to pull (push, delete, etc) an image only for its owner, so i
 
 ```yaml
 acl:
-  - match: {ip: "127.0.0.0/8"}
+  - match: { ip: "127.0.0.0/8" }
     actions: ["*"]
     comment: "Allow everything from localhost (IPv4)"
 
-  - match: {ip: "::1"}
+  - match: { ip: "::1" }
     actions: ["*"]
     comment: "Allow everything from localhost (IPv6)"
 
-  - match: {account: "service-user"}
+  - match: { account: "service-user" }
     actions: ["*"]
     comment: "Admin has full access to everything."
 
-  - match: {account: "/.+/", name: "${account}/*"}
+  - match: { account: "/.+/", name: "${account}/*" }
     actions: ["*"]
     comment: "Logged in users have full access to images that are in their 'namespace'"
 
-  - match: {account: "/.+/", type: "registry", name: "catalog"}
+  - match: { account: "/.+/", type: "registry", name: "catalog" }
     actions: ["*"]
     comment: "Logged in users can query the catalog."
 ```
@@ -96,7 +96,7 @@ Due to deploy mistake all vulnboxes have the same password for `service-user` ac
 foufons1atxnrpia
 ```
 
-First blood by [dtl](https://ctftime.org/team/157017/) exploited this vulnerability. We supposed that the password *actually* was generated during the startup so didn't event checked this.
+First blood by [dtl](https://ctftime.org/team/157017/) exploited this vulnerability. We supposed that the password _actually_ was generated during the startup so didn't event checked this.
 
 Since `service-user` has full access, it lead to destructive action: someone started to delete checker images from registry.
 
@@ -182,9 +182,7 @@ The file `manifest.json` contains a path to config file:
 [
   {
     "Config": "blobs/sha256/b17d896ce1034251f2642caa5d4b9f42782a557598792d33e811d723f127d332",
-    "RepoTags": [
-      "vzlom:latest"
-    ],
+    "RepoTags": ["vzlom:latest"],
     "Layers": [
       "blobs/sha256/75654b8eeebd3beae97271a102f57cdeb794cc91e442648544963a7e951e9558",
       "blobs/sha256/7ed7aa814b865edc71b766dcf2d45f0a47077c5752984b9f3a7beb1bbbab097e"
@@ -211,12 +209,8 @@ And config file contains the target `.rootfs.diff_ids` array:
 {
   "architecture": "amd64",
   "config": {
-    "Env": [
-      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-    ],
-    "Cmd": [
-      "/bin/sh"
-    ],
+    "Env": ["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"],
+    "Cmd": ["/bin/sh"],
     "WorkingDir": "/",
     "ArgsEscaped": true
   },
@@ -364,13 +358,13 @@ The file `vzlomik.tar` is already presented in `.overlay` from the previous imag
 Since the image-builder was running from `root` user, we could easily get RCE just by replacing `/usr/bin/skopeo` with our custom binary or shell script, but [renbou](https://t.me/renbou) suggested another clever way: replace `auth_config.yml`. It was possible because volumes for all containers were mounted with readwrite access. We registered new `service_user` account and grant it full access:
 
 ```yaml
-  - match: {account: "service-user"}
-    actions: ["*"]
-    comment: "Admin has full access to everything."
+- match: { account: "service-user" }
+  actions: ["*"]
+  comment: "Admin has full access to everything."
 
-  - match: {account: "service_user"}
-    actions: ["*"]
-    comment: "Admin has full access to everything."
+- match: { account: "service_user" }
+  actions: ["*"]
+  comment: "Admin has full access to everything."
 ```
 
 All that's left to do is to use this account and download all checker images.
