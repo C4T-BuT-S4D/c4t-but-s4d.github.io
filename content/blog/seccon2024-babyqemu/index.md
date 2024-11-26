@@ -6,7 +6,7 @@ params:
       links:
         - name: channel
           link: https://t.me/theinkyvoid
-title: "seccon 2024 - BabyQEMU"
+title: "Seccon Quals 2024 - BabyQEMU"
 tldr: "simple qemu escape challenge"
 date: "2024-11-24"
 tags: [pwn]
@@ -14,13 +14,13 @@ summary: |
   Given heap offset write and read in custom qemu pcie device obtain qemu escape.
 ---
 
-# BabyQEMU (seccon quals 2024)
+# BabyQEMU
 
-After solving a complicated rop challenge on Seccon quals, we came across this deceptivly simple challenge, where the goal was to escape qemu through a custom pcie device. I had never solved hypervisor escape challenges prior and really am not a pwn guy, but I had a friend and thought it would be fun.
+After solving a complicated rop challenge on Seccon quals, we came across this deceptively simple challenge, where the goal was to escape qemu through a custom pcie device. I had never solved hypervisor escape challenges prior and really am not a pwn guy, but I had a friend and thought it would be fun.
 
 ## Quick summary
 
-We are given a modified qemu version with a custom pcie device that impliments memory maped io. It basicly has 2 addresses: data and offset. Writting to offset address will change the offset in the device structure. Reading or writing from data will read or write at the offset from the buffer stored in the device structure. Pretty simple right?
+We are given a modified qemu version with a custom pcie device that implements memory mapped io. It basically has 2 addresses: data and offset. Writting to offset address will change the offset in the device structure. Reading or writing from data will read or write at the offset from the buffer stored in the device structure. Pretty simple right?
 
 ```c
 static uint64_t pci_babydev_mmio_read(void *opaque, hwaddr addr, unsigned size) {
@@ -61,7 +61,7 @@ static void pci_babydev_mmio_write(void *opaque, hwaddr addr, uint64_t val, unsi
 
 ## Interfacing with the device
 
-Whats not so simple is actually interfacing with device. At first I tried to write a kernel module (which would have been the optimal solution), I won't bore you with the detail, suffice to say I tried everything and nothing worked. Then searching the wired I found that busybox (which is installed) in qemu has a devmem module that just so happens to allow us to read and write to/from memory maped io. So I quickly tested that I worked, wrote some helped functions that would execute `busybox devmem`, the wrote some more helper functions to write to an offset. I should note note that for some reason devmem only allowed me to write 32 bits worth of data, so I also had to write functions to write 64 bit integers.
+Whats not so simple is actually interfacing with device. At first I tried to write a kernel module (which would have been the optimal solution), I won't bore you with the detail, suffice to say I tried everything and nothing worked. Then searching the wired I found that busybox (which is installed) in qemu has a devmem module that just so happens to allow us to read and write to/from memory mapped io. So I quickly tested that it worked, wrote some helper functions that would execute `busybox devmem`, then wrote more helper functions to write to an offset. I should note that for some reason devmem only allowed me to write 32 bits worth of data, so I also had to write functions to write 64 bit integers.
 
 ```c++
 #include <cstdint>
@@ -120,7 +120,7 @@ void write64_offset(intptr_t offset, uint64_t val) {
 
 ## Leaking everything
 
-The very first thing I did was telescope the heap address of the device structure, which yielded a heap and binary leak. Than by calculating the offset of got from buf I was able to leak libc base. Then from libc I was able to leak environ and thus the stack. That was the easy part. Unfortunately qemu had full relro and the stack of the mmio functions was some kind of thread stack. Also the sort of main device structure (separate from the custom part) was located in a strange region, which I was able to leak, but it was had a different offset. So after a long time beating my head against a brick wall, it finally broke and I found a way to leak this strange structure pointer: I first leaked the thread stack from the heap and then the structure address from the stack. The reason I was looking for that pointer was that a function was called from a vtable without checking for the vtable region. The vtable itself was ro, but we could construct a custom vtable and point the vtable pointer to it. I also miracolosly discovered an rwx region, which I also leak from the heap.
+The very first thing I did was telescope the heap address of the device structure, which yielded a heap and binary leak. Than by calculating the offset of got from buf I was able to leak libc base. Then from libc I was able to leak environ and thus the stack. That was the easy part. Unfortunately qemu had full relro and the stack of the mmio functions was some kind of thread stack. Also the sort of main device structure (separate from the custom part) was located in a strange region, which I was able to leak, but it had a different offset. So after a long time beating my head against a brick wall, it finally broke and I found a way to leak this strange structure pointer: I first leaked the thread stack from the heap and then the structure address from the stack. The reason I was looking for that pointer was that a function was called from a vtable without checking for the vtable region. The vtable itself was ro, but we could construct a custom vtable and point the vtable pointer to it. I also miraculously discovered an rwx region, which I also leak from the heap.
 
 ![vtable](vtable.png)
 
