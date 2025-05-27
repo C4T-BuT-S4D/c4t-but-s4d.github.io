@@ -8,7 +8,7 @@ tldr: "inspecting the local palettes of GIF frames"
 date: "2025-05-27T02:21:11+05:00"
 tags: [stegano]
 summary: |
-  We're given a GIF image of Lirili Larila. The goal is to find a flag hidden among the container structure. The solution involves randomizing of local palettes using Python and Golang.
+  We're given a GIF image of Lirili Larila. The goal is to find a flag hidden inside the container structure. The solution involves a randomization of local palettes using Python and Golang.
 ---
 
 ## Overview
